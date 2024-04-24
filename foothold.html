@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>F007H0LD</title>
+    <link rel="stylesheet" type="text/css" href="stye.css">
+</head>
+<body>
+
+<div id="image">
+    <div id="top"></div>
+    <div id="sky"></div>
+    <div id="bottom"></div>
+    <div id="ground"></div>
+    <div id="text">
+        <h1>Do you like hack other people?</h1>
+        
+        <div id="form-container">
+            <button onclick="executeScript('nmap')">NMAP</button>
+            <br>
+            <button onclick="executeScript('direnum')">DirEnum</button>
+            <br>
+            <button onclick="executeScript('subenum')">SubEnum</button>
+            <br>
+            <button onclick="executeScript('rid')">RID</button>
+            <br>
+            <button onclick="executeScript('sql')">SQLInjection</button>
+        </div>
+
+        <div id="output-container">
+            <pre id="output"></pre>
+        </div>
+    </div>
+</div>
+<img id="jacket" src="biker.png">
+
+<!-- ... -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const buttons = document.querySelectorAll('button[name="button"]');
+        const resultContainer = document.getElementById('result-container');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                const buttonValue = event.target.value;
+
+                fetch('../execute.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: `button=${buttonValue}`
+})
+.then(response => response.text())
+.then(filename => {
+    // Busca o conteúdo do arquivo de saída
+    return fetch(`../${filename}`);
+})
+.then(response => response.text())
+.then(data => {
+    resultContainer.innerHTML = `<pre>${data}</pre>`;
+})
+.catch(error => {
+    console.error('Error:', error);
+    resultContainer.innerHTML = '<p>Error fetching data.</p>';
+});
+            });
+        });
+    });
+</script>
+<!-- ... -->
+
+
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>O51N7</title>
+    <link rel="stylesheet" type="text/css" href="stye.css">
+</head>
+<body>
+
+<div id="image">
+    <div id="top"></div>
+    <div id="sky"></div>
+    <div id="bottom"></div>
+    <div id="ground"></div>
+    <div id="text">
+        <h1>Do you like hack other people?</h1>
+        
+        <div id="form-container">
+    <form id="whois-form">
+        <h2>Whois</h2>
+        <input type="text" id="whois-domain" name="domain" placeholder="Domain name" required>
+        <button type="button" id="whois-btn">Check Whois</button>
+    </form>
+
+    <div id="whois-result"></div>
+    
+    <h2>Username</h2>
+            <input type="text" id="username" name="username" required>
+            <button type="button" id="usernameBtn">Submit Username</button>
+            <div id="username-result"></div>
+    
+    <h2>Email</h2>
+    <input type="email" id="email" name="email" required>
+    <button type="button" id="emailBtn">Submit Email</button>
+    
+    <h2>Telephone</h2>
+    <input type="tel" id="telephone" name="telephone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+    <button type="button" id="telephoneBtn">Submit Telephone</button>
+</div>
+
+    </div>
+</div>
+<img id="pardo" src="pardo.png">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const whoisForm = document.getElementById('whois-form');
+    const whoisDomain = document.getElementById('whois-domain');
+    const whoisBtn = document.getElementById('whois-btn');
+
+    whoisForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const domain = whoisDomain.value;
+        console.log(`Submitting domain: ${domain}`);
+
+        fetch(`https://cors-anywhere.herokuapp.com/https://whois.nic.br/?q=${domain}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                }
+                return response.text();
+            })
+            .then(text => {
+                console.log('Server response:', text); // Debugging
+
+                // Open the WHOIS result in a new tab
+                const resultWindow = window.open("", "_blank");
+                resultWindow.document.write(`
+                    <h3>WHOIS Result for ${domain}</h3>
+                    <pre>${text}</pre>
+                `);
+            })
+            .catch(error => {
+                console.error('Error:', error); // Debugging
+                alert(`Error: ${error.message}`);
+            });
+    });
+});
+
+
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const usernameInput = document.getElementById('username');
+        const usernameBtn = document.getElementById('usernameBtn');
+        const usernameResult = document.getElementById('username-result');
+
+        usernameBtn.addEventListener('click', function() {
+            const username = usernameInput.value;
+
+            fetch(`https://api.scraperapi.com?api_key=YOUR_SCRAPERAPI_KEY&url=https://www.scrapedin.com/${username}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Server response:', data); // Debugging
+                    if (data.message === 'Not Found') {
+                        throw new Error('Username not found');
+                    }
+                    return data;
+                })
+                .then(data => {
+                    console.log('Parsed data:', data); // Debugging
+                    usernameResult.innerHTML = `
+                        <h3>LinkedIn Profile for ${data.name}</h3>
+                        <img src="${data.profilePicture}" alt="Profile Picture">
+                        <p>Headline: ${data.headline}</p>
+                        <p>Location: ${data.location}</p>
+                        <p>Connections: ${data.connections}</p>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error:', error); // Debugging
+                    usernameResult.innerHTML = `<p>Error: ${error.message}</p>`;
+                });
+        });
+    });
+</script>
+
+
+
+</body>
+</html>
