@@ -29,38 +29,21 @@ Instalação e Uso
 
     Clonar o Repositório
 
-    bash
+  
 
-git clone https://github.com/seu-usuario/VaporVigil.git
+git clone https://github.com/XenomorphSk/VaporVigil.git
 
 Navegar até o Diretório
 
-bash
 
 cd VaporVigil
 
 Executar o Servidor PHP
 
-bash
+chmod +x start.sh
+bash start.sh
 
-    php -S localhost:8000
 
-    Acessar a Interface
-        Abra um navegador web e acesse http://localhost:8000/interface/menu.html
-
-    Uso
-        Clique nos botões para executar os respectivos scripts e visualizar as saídas.
-
-Estrutura de Diretórios
-
-    interface: Contém a interface web do VaporVigil.
-    execute.php: Script PHP para executar os scripts Perl.
-    nmap.pl: Script Perl para executar o Nmap.
-    direnum.pl: Script Perl para executar o Direnum.
-    subenum.pl: Script Perl para executar o Subenum.
-    rid.pl: Script Perl para executar o RID.
-    sql.pl: Script Perl para executar a SQL Injection.
-    output.txt: Arquivo de saída onde as informações são armazenadas.
 
 Contribuição
 
