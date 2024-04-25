@@ -6,6 +6,7 @@
     <title>F007H0LD</title>
     <link rel="stylesheet" type="text/css" href="stye.css">
 </head>
+
 <body>
 
 <div id="image">
@@ -41,25 +42,35 @@
 <script>
   // Função para executar o script PHP ao clicar nos botões
   function executeScript(button) {
-      const target = document.getElementById('target').value;
-      const formData = new FormData();
-      formData.append('button', button);
-      formData.append('target', target);
+    const target = document.getElementById('target').value;
+    const formData = new FormData();
+    formData.append('button', button);
+    formData.append('target', target);
 
-      fetch('execute.php', {
-          method: 'POST',
-          body: formData
-      })
-      .then(response => response.text())
-      .then(data => {
-          document.getElementById('result').textContent = data;
-      })
-      .catch(error => {
-          console.error('Error:', error);
-          document.getElementById('result').textContent = 'Error fetching data.';
-      });
-  }
+    fetch('execute.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json()) // Processa a resposta como JSON
+    .then(data => {
+        if (data.url) {
+            // Redireciona para a página de resultados
+            window.location.href = data.url;
+        } else if (data.output) {
+            // Atualiza o elemento de resultado com a saída
+            document.getElementById('result').innerHTML = '<code>' + data.output.replace(/\n/g, '<br>').replace(/\t/g, '&emsp;') + '</code>';
+        } else {
+            document.getElementById('result').textContent = 'Erro ao processar a resposta.';
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        document.getElementById('result').textContent = 'Erro ao buscar dados.';
+    });
+}
+
 </script>
+
 
 </body>
 </html>
