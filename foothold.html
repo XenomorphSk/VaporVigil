@@ -17,6 +17,8 @@
         <h1>Do you like hack other people?</h1>
         
         <div id="form-container">
+            <input type="text" id="target" name="target" placeholder="Enter target IP or domain">
+            <br>
             <button onclick="executeScript('nmap')">NMAP</button>
             <br>
             <button onclick="executeScript('direnum')">DirEnum</button>
@@ -28,50 +30,36 @@
             <button onclick="executeScript('sql')">SQLInjection</button>
         </div>
 
-        <div id="output-container">
-            <pre id="output"></pre>
+        <div id="result-container">
+            <pre id="result"></pre>
         </div>
+        
     </div>
 </div>
 <img id="jacket" src="biker.png">
 
-<!-- ... -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const buttons = document.querySelectorAll('button[name="button"]');
-        const resultContainer = document.getElementById('result-container');
+  // Função para executar o script PHP ao clicar nos botões
+  function executeScript(button) {
+      const target = document.getElementById('target').value;
+      const formData = new FormData();
+      formData.append('button', button);
+      formData.append('target', target);
 
-        buttons.forEach(button => {
-            button.addEventListener('click', function(event) {
-                const buttonValue = event.target.value;
-
-                fetch('../execute.php', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: `button=${buttonValue}`
-})
-.then(response => response.text())
-.then(filename => {
-    // Busca o conteúdo do arquivo de saída
-    return fetch(`../${filename}`);
-})
-.then(response => response.text())
-.then(data => {
-    resultContainer.innerHTML = `<pre>${data}</pre>`;
-})
-.catch(error => {
-    console.error('Error:', error);
-    resultContainer.innerHTML = '<p>Error fetching data.</p>';
-});
-            });
-        });
-    });
+      fetch('execute.php', {
+          method: 'POST',
+          body: formData
+      })
+      .then(response => response.text())
+      .then(data => {
+          document.getElementById('result').textContent = data;
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('result').textContent = 'Error fetching data.';
+      });
+  }
 </script>
-<!-- ... -->
-
-
 
 </body>
 </html>
