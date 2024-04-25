@@ -4,10 +4,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'start') {
         startPhpServer();
-        echo 'Servidor PHP iniciado.';
+        echo json_encode(['message' => 'Servidor PHP iniciado.', 'url' => 'results.php']);
     } elseif ($action === 'stop') {
         stopPhpServer();
-        echo 'Servidor PHP encerrado.';
+        echo json_encode(['message' => 'Servidor PHP encerrado.', 'url' => '']);
     } else {
         $button = $_POST['button'];
         $target = $_POST['target'];
@@ -17,34 +17,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         switch ($button) {
             case 'nmap':
-                $command = 'nmap -Pn ' . escapeshellarg($target);
+                $command = 'nmap -Pn ' . escapeshellarg($target) . ' > output.txt';
                 break;
             case 'direnum':
-                $command = 'perl direnum.pl';
+                $command = 'perl direnum.pl > output.txt';
                 break;
             case 'subenum':
-                $command = 'perl subenum.pl';
+                $command = 'perl subenum.pl > output.txt';
                 break;
             case 'rid':
-                $command = 'enum4linux/./enum4linux.pl ' . escapeshellarg($target);
+                $command = 'enum4linux/./enum4linux.pl ' . escapeshellarg($target) . ' > output.txt';
                 break;
             case 'sql':
-                $command = 'perl sql.pl';
+                $command = 'perl sql.pl > output.txt';
                 break;
             default:
-                echo 'Invalid button';
+                echo json_encode(['error' => 'Invalid button']);
                 exit;
         }
 
         error_log("Executing command: " . $command);
 
         // Executa o comando
-        $output = shell_exec($command);
+        shell_exec($command);
 
-        error_log("Command output: " . $output);
-
-        // Retorna o output
-        echo $output;
+        // Retorna a URL da página de resultados
+        echo json_encode(['url' => 'results.php']);
     }
 }
 
