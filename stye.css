@@ -242,3 +242,24 @@ a {
             background-color: var(--pink2);
 
 
+#result-container {
+    position: relative;
+    z-index: 10;
+    margin-top: 20px;
+    width: 100%; /* Define a largura total */
+    height: auto; /* Altura ajustável conforme o conteúdo */
+    padding: 10px; /* Espaçamento interno */
+    border: 2px solid var(--pink); /* Borda */
+    border-radius: 5px; /* Borda arredondada */
+    background-color: var(--dark-navy); /* Cor de fundo */
+}
+
+#result code {
+    display: block;
+    white-space: pre-wrap;
+    font-family: 'Arial', sans-serif;
+    color: white;
+    background-color: black;
+    padding: 10px;
+    border-radius: 5px;
+}
